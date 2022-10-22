@@ -105,7 +105,8 @@ public class XMLConfigBuilder extends BaseBuilder {
       loadCustomLogImpl(settings);
       //解析typeAliases标签
       typeAliasesElement(root.evalNode("typeAliases"));
-      //解析插件标签
+      //解析插件标签，将所有解析出来的插件添加到configuration对象的interceptorChain中
+      //后续使用InterceptorChain对四大组件进行封装
       pluginElement(root.evalNode("plugins"));
       objectFactoryElement(root.evalNode("objectFactory"));
       objectWrapperFactoryElement(root.evalNode("objectWrapperFactory"));
@@ -388,6 +389,7 @@ public class XMLConfigBuilder extends BaseBuilder {
             ErrorContext.instance().resource(url);
             try(InputStream inputStream = Resources.getUrlAsStream(url)){
               XMLMapperBuilder mapperParser = new XMLMapperBuilder(inputStream, configuration, url, configuration.getSqlFragments());
+              //这一步会向mapperRegistry中添加一个mapper
               mapperParser.parse();
             }
           } else if (resource == null && url == null && mapperClass != null) {

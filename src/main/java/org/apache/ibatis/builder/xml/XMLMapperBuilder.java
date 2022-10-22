@@ -77,6 +77,7 @@ public class XMLMapperBuilder extends BaseBuilder {
     if (!configuration.isResourceLoaded(resource)) {
       configurationElement(parser.evalNode("/mapper"));
       configuration.addLoadedResource(resource);
+      //这一步向mapperRegistry中添加一个mapper
       bindMapperForNamespace();
     }
     //解析resultmap标签
@@ -421,6 +422,7 @@ public class XMLMapperBuilder extends BaseBuilder {
         // to prevent loading again this resource from the mapper interface
         // look at MapperAnnotationBuilder#loadXmlResource
         configuration.addLoadedResource("namespace:" + namespace);
+        //添加mapper
         configuration.addMapper(boundType);
       }
     }
